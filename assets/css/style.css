@@ -1,0 +1,18 @@
+body {
+    text-align: center;
+    font-family: monospace;
+    background-color: deepskyblue;
+}
+
+button {
+    padding: 5px;
+    margin: 10px;
+    border-radius: 15px;
+    background-color: white;
+}
+
+.quiz-container button {
+    justify-content: center;
+    display: flex block;
+    margin: 10px;
+}
