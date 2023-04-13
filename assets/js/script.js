@@ -1,13 +1,15 @@
+//Creating variables to refer to elements by id using jquery
 var gameStart = document.getElementById("start");
 var timerEl = document.getElementById("time");
 var viewScores = document.getElementById("view-highscore");
-var questionHolder = document.querySelector("#quiz-container");
+var questionHolder = document.querySelector("#question-container");
+//Created variables neccessary for keeping track of the current question being displayed, users currentscore, keeping track of the timer, and storing the users intials to keep track of their highscore 
 var onScreenQuestion = 0;
 var currentScore = 0;
 var countDown = 60;
 var timeLeft;
 var userInitials; 
-
+//Declared and array of objects called questions which holds the questions, answer choices and the correct answers
 var questions = [{
     quest: "Javascript is an _______ language?",
     answerChoices:["Object-Based", "Object-Oriented", "Procedural", "None Of The Above"],
@@ -68,7 +70,7 @@ var questions = [{
     answerChoices:["Terminal", "Git-Bash", "Print", "Console.log"],
     correct: "Console.log",
 }];
-
+//Timer function sets the logic for the timer while timer is > 0 it will subtract one from it else it will call the endQuiz function. timer will countdown in intervals of 1 seconds
 function timer() {
     timerEl.textContent = "Time remaining: " + countDown + "s";
     timeLeft = setInterval(function () {
@@ -79,15 +81,19 @@ function timer() {
         }
     }, 1000);
 }
+//Function that prevents the timer from going below zero by checking if countdown is less than zero. If true it will set countdown back to zero
 function adjustTime(amount) {
     countDown += amount;
     if (countDown < 0) {
         countDown = 0;
     }
+//Setting the text content of the timer element to countdown so it will be displayed on hte users screen    
     timerEl.textContent = "Time remaining: " + countDown + "s";
 }
-
+//Once the Start Quiz button is clicked the timer will begin to count down
 gameStart.onclick = timer;
+// Function that displays the questions inside the questions array on screen. Sets the the inner html to an empty string first, then it creates a h2 element that will hold the current quest object form the array.
+//Next it creates buttons named answerA,B,C,D which then have their text contents set to the respective index of answerchoices, each button has and event listener aattached to it that will call on the answerclick function
 var createQuestion = function (question) {
     questionHolder.innerHTML = "";
 
@@ -109,7 +115,7 @@ var createQuestion = function (question) {
     var answerD = document.createElement("button");
     answerD.textContent = question.answerChoices[3];
     answerD.addEventListener("click", answerClick);
-
+//Appended tp question holder display both the question and the answer inside the question container
     questionHolder.appendChild(questionHeader);
     questionHolder.appendChild(answerA);
     questionHolder.appendChild(answerB);
@@ -117,14 +123,15 @@ var createQuestion = function (question) {
     questionHolder.appendChild(answerD);
 }
 
-
+//correctAnswer holds the correct answer that matches with current question on screen
 var correctAnswer = questions[onScreenQuestion].correct;
-
+//Function that checks the answer that was clicked to check if it is correct by comparing its value against the correctAnswer
+// Also checks if onScreenQuestion >= than questions.length to either display the next question or end the quiz once it passes the last question
 var answerClick = function(event) {
     event.preventDefault();
     var UserChoice = event.target.textContent;
     correctAnswer = questions[onScreenQuestion].correct;
-    // determine if answer is wrong or right
+    // If answer is incorrect it will subtract 15 seconds from the timer 
     var checkAnswer = document.querySelector("#answer-determination");
     if (UserChoice !== correctAnswer) {
         adjustTime(-15);
@@ -144,17 +151,18 @@ var answerClick = function(event) {
         } else {createQuestion(questions[onScreenQuestion])};
     }
 };
-
+//Quiz function starts the quiz
 var quiz = function (event) {
     event.preventDefault();
     resetDisplay();
     createQuestion(questions[onScreenQuestion]);
 };
-
+//Resets the dislay after a refresh
 function resetDisplay() {
     questionHolder.innerHTML="";
     document.querySelector("#reset-page").style.display = "none";
 }
+// Keeps track of the users score and intials by storing them in local storage
 function highScores() {
     let data = localStorage.getItem("object");
     let getData = JSON.parse(data);
@@ -163,11 +171,12 @@ function highScores() {
     questionHolder.innerHTML = "";
     questionHolder.innerHTML = name + " " + score;
 }
+//Displays highscore leaderboard
 viewScores.addEventListener("click", () => {
     highScores();
 })
 
-
+//endQuiz function ends the quiz takes you to the submit score screen and gives you the option to play again
 function endQuiz() {
     resetDisplay();
     timerEl.textContent = "";
@@ -188,7 +197,7 @@ function endQuiz() {
     leaderBoard.appendChild(scoreSubmitBtn);
 
     scoreSubmitBtn.addEventListener("click", () => {
-        // rest variable
+    
         if (initialBox.value.length === 0) return false;
 
         let storeuserInitials = (...input) => {
@@ -215,5 +224,5 @@ function renderuserInitials() {
         event.preventDefault;
 }
 )};
-
+//Calls the quiz function once the start quiz button is clicked
 gameStart.addEventListener('click', quiz);
