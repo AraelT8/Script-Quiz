@@ -187,7 +187,7 @@ function endQuiz() {
     let leaderBoard = document.querySelector("#answer-determination");
     leaderBoard.innerHTML = "";
 
-    endScreen.innerHTML = "Your final score is " + currentScore + ". Enter your initials to save your Highscore";
+    endScreen.innerHTML = "Your final score is " + currentScore + " out of 12. Enter your initials to save your Highscore";
 
     var initialBox = document.createElement("input");
     leaderBoard.appendChild(initialBox);
