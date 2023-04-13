@@ -201,7 +201,7 @@ function endQuiz() {
         if (initialBox.value.length === 0) return false;
 
         let storeuserInitials = (...input) => {
-            let data = JSON.stringify({ "name":input[0], "score":input[1]})
+            let data = JSON.stringify({ "name":input[0]+ " -", "score":input[1]})
             localStorage.setItem("object", data)
         }
         storeuserInitials(initialBox.value, currentScore);
